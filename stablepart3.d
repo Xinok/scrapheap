@@ -9,7 +9,7 @@
 import std.algorithm : SwapStrategy;
 
 /++
-    TODO: add/update documentation here
+    TODO add/update documentation here
 ++/
 auto isPartitioned3(alias pred = "a < b", Range, Pivot)(Range r, Pivot p)
 {
@@ -45,17 +45,35 @@ auto isPartitioned3(alias pred = "a < b", Range, Pivot)(Range r, Pivot p)
     return r.empty;
 }
 
+///
+pure nothrow @nogc @safe
 unittest
 {
-    // Test cases for isPartitioned3 function
+    int[20] test = [
+        8, 10, 3, 6, 2, 4, 7, 9, 1, 5, 11,
+        12, 14, 17, 15, 20, 18, 19, 16, 13
+    ];
 
-    auto test1 = [8, 10, 3, 6, 2, 4, 7, 9, 1, 5, 11, 12,
-                  14, 17, 15, 20, 18, 19, 16, 13];
+    assert(isPartitioned3(test[], 11));
+    assert(isPartitioned3(test[], 12));
+    assert(!isPartitioned3(test[], 5));
+    assert(!isPartitioned3(test[], 14));
+}
 
-    assert(isPartitioned3(test1, 11));
-    assert(isPartitioned3(test1, 12));
-    assert(!isPartitioned3(test1, 5));
-    assert(!isPartitioned3(test1, 14));
+unittest
+{
+    // Any array with zero or one elements is always partitioned,
+    // regardless of the pivot chosen.
+
+    int[1] test = [0];
+
+    assert(isPartitioned3(test[], -1));
+    assert(isPartitioned3(test[], 0));
+    assert(isPartitioned3(test[], 1));
+
+    assert(isPartitioned3(test[0..0], -1));
+    assert(isPartitioned3(test[0..0], 0));
+    assert(isPartitioned3(test[0..0], 1));
 }
 
 
